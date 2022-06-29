@@ -213,6 +213,7 @@ def main():
     if common.OUT: common.menu()
 
     # setup dir and filenames
+    common.Affich.success(0, "Seting up env")
     common.setup()
 
     # create french_prefixes db if needed

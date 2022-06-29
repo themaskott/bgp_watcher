@@ -43,6 +43,9 @@ def setup():
     Check for existing input and output directories
     Set output filenames
     """
+    if not path.exists("bgpdump"):
+        Affich.error(0, "bgpdump not found, please buid it")
+        exit(0)
     if not path.isdir(DATAS_DIR): mkdir("datas", 0o755)
     y,m=ym
     global RESULTS_DIR, SESSION_DIR, HISTORY_JSON, MOAS_OUT_JSON, COUNTRY_OUT_JSON
