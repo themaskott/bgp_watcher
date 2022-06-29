@@ -12,7 +12,7 @@ The aim of this project is to watch a define set of prefixes over several BGP co
 
 I chose to monitor all french prefixes registered within the IRR RIPE database.
 
-Those  prefixes are extracted from the IRR RIPE database at : `ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz` and saved as `datas/french_prefixes.json`
+Those  prefixes are extracted from the IRR RIPE database at : ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz and saved as `datas/french_prefixes.json`
 
 (see [irr.py](irr.py))
 
@@ -81,3 +81,10 @@ Finaly, latests updates from considered collectors are parsed every 5 minutes to
 ## Requirements
 
 `bgpdump` as to be build and placed inside the same folder : https://github.com/RIPE-NCC/bgpdump
+
+## Ressources
+
+- Collectors : https://data.ris.ripe.net/rrc01/ (change collector number)
+- Collectors : https://www.ris.ripe.net/peerlist/all.shtml
+- AS : https://www.cidr-report.org/as2.0/autnums.html
+- RIPE : ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz
