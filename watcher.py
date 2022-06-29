@@ -11,10 +11,6 @@ Parse several worldwide bgp collectors and search for hijacks on thoose prefixes
 14/06/2022
 """
 
-# TODO
-# failure if bview does not exist
-# search for subnets announcements
-
 # import from python
 from os import path
 import json, datetime, time
