@@ -88,3 +88,7 @@ Finaly, latests updates from considered collectors are parsed every 5 minutes to
 - Collectors : https://www.ris.ripe.net/peerlist/all.shtml
 - AS : https://www.cidr-report.org/as2.0/autnums.html
 - RIPE : ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz
+
+## Run
+
+`python3 watcher.py`
