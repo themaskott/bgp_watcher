@@ -22,6 +22,35 @@ Different parameters can be set in [common.py](common.py), such as :
 - collectors to be used
 - year / month / days range used to build the history
 
+List of existing collectors :
+
+| Num | City | Type | Owner |
+|-----|------|------|-------|
+|RRC00 |	Amsterdam, NL  |	 multihop 	global|
+|RRC01 |	London, GB 	   |  IXP 	LINX | LONAP
+|RRC03 |	Amsterdam, NL | IXP 	AMS-IX | NL-IX
+|RRC04 |	Geneva, CH 	  |   IXP |	CIXP
+|RRC05 |	Vienna, AT 	  |   IXP |	VIXP
+|RRC06 |	Otemachi, JP 	| IXP 	| DIX-IE
+|RRC07 |	Stockholm, SE |   IXP | Netnod
+|RRC10 |	Milan, IT 	  |   IXP |	MIX
+|RRC11 |	New York, US  |   IXP |	NYIIX
+|RRC12 |	Frankfurt, DE |	 IXP 	| DE-CIX
+|RRC13 | 	Moscow, RU 	  |   IXP |	MSK-IX
+|RRC14 |	Palo Alto, US |	IXP 	| PAIX
+|RRC15 |	Sao Paolo, BR |	 IXP 	| PTTMetro-SP
+|RRC16 |	Miami, FL, US |	 IXP 	| Equinix Miami
+|RRC18 |	Barcelona, ES |	 IXP 	| CATNIX
+|RRC19 |	Johannesburg, ZA | IXP |	NAP Africa JB
+|RRC20 |	Zurich, CH 	  |   IXP |	SwissIX
+|RRC21 |	Paris, FR 	  |   IXP |	France-IX Paris and France-IX Marseille
+|RRC22 | 	Bucharest, RO |	 IXP 	| Interlan
+|RRC23 |	Singapore, SG |	 IXP 	| Equinix Singapore
+|RRC24 |	Montevideo, UY| 	 multihop |	LACNIC region
+|RRC25 |	Amsterdam, NL |	 multihop 	global
+|RRC26 |	Dubai, AE 	  |   IXP |	UAE-IX
+
+
 ## 3 - Build an history
 
 The history is constructed by parsing one bview per day from the defined ranged in `common.py` and storing all monitored prefixes announced during that period and ASes that announced those prefixes.

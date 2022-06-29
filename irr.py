@@ -44,6 +44,9 @@ class Block:
 
 
 def parse_property(block: str, name: str) -> str:
+    """
+    Extract properties from block
+    """
     match = re.findall(u'^{0:s}:\s*(.*)$'.format(name), block, re.MULTILINE)
     if match:
         return " ".join(match)
@@ -52,6 +55,9 @@ def parse_property(block: str, name: str) -> str:
 
 
 def parse_property_inetnum(block: str) -> str:
+    """
+    Extract IP range and convert to CIDR
+    """
 # IPv4
     match = re.findall('^inetnum:[\s]*((?:\d{1,3}\.){3}\d{1,3}[\s]*-[\s]*(?:\d{1,3}\.){3}\d{1,3})', block, re.MULTILINE)
     if match:
@@ -61,6 +67,9 @@ def parse_property_inetnum(block: str) -> str:
         return '{}'.format(cidrs[0])
 
 def read_blocks(filename: str) -> list:
+    """
+    Get all blocks from ripe.db
+    """
     f = gzip.open(filename, mode='rt', encoding='ISO-8859-1')
     single_block = ''
     blocks = []
@@ -84,7 +93,10 @@ def read_blocks(filename: str) -> list:
     return blocks
 
 def parse_blocks(jobs: Queue):
-
+    """
+    Parse all blocks
+    Write to json french prefixes found in blocks
+    """
     with open(common.FRENCH_PREFIXES_JSON, "a+") as f:
         while True:
             block = jobs.get()
@@ -113,6 +125,7 @@ def parse():
     if not os.path.isfile(DB_NAME):
         get_ripe_db()
 
+    # init json file
     open(common.FRENCH_PREFIXES_JSON, "a+").write('{')
 
     blocks = read_blocks(DB_NAME)
@@ -136,10 +149,13 @@ def parse():
     for p in workers:
         p.join()
 
-
+    # needed to end properly and close file
     open(common.FRENCH_PREFIXES_JSON, "a+").write('"end":{"end":"end"}}')
 
 def get_ripe_db():
+    """
+    Download ripe database if needed
+    """
     url = "ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz"
     common.Affich.info(0, "Updating french prefixes from " + url)
     common.download(url, DB_NAME)

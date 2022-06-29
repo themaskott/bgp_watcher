@@ -38,7 +38,7 @@ ed = 20
 # number of update to watch
 count = 15
 
-def setup()->str:
+def setup():
     """
     Check for existing input and output directories
     Set output filenames
