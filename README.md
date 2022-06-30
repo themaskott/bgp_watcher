@@ -4,7 +4,7 @@ Watching BGP for fake annoucements regarding a specific set of prefixes
 
 
 <p align="center">
-  <img src="img/HuntForRedOctober.jpg" />
+  <img src="img/HuntforRedOctober.jpg" />
 </p>
 
 
