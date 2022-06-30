@@ -95,7 +95,7 @@ Finaly, latests updates from considered collectors are parsed every 5 minutes to
 
 ## Run
 
-```bash
+```shell
 $ python3 watcher.py
 BGP watcher
     Collectors : 6/14/26
