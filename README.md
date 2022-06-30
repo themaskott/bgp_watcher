@@ -7,6 +7,10 @@ Watching BGP for fake annoucements regarding a specific set of prefixes
 
 The aim of this project is to watch a define set of prefixes over several BGP collectors, in order to detect inconsistancies in annoucements and prevent hijackings.
 
+Due to its trust based nature, BGP is very likely to be abuse either by network administrators (that use it for load balancing or anti-ddos purposes) or by attackers whiling ot hijack a range of IP addresses.
+
+The very difficulty while monitoring BGP is to discern whether a misconfiguration is still legitimate or reveal a possible attack. To to so, this project will try to reduce the number of those legitimate misconfiguration, ending with a human-handprocessing number of cases.
+
 
 ## 1 - Which prefixes ?
 
