@@ -9,6 +9,10 @@ from netaddr import IPNetwork
 import common
 
 class Subnets():
+    """
+    Given a dict of prefixes, compute all subnets for each prefix
+    With mask lower than 24, assuming greater masks are not announced through BGP
+    """
     prefixes = {}
 
     def __init__(self, prefixes:dict):
