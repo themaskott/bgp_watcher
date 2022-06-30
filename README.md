@@ -3,6 +3,11 @@
 Watching BGP for fake annoucements regarding a specific set of prefixes
 
 
+<p align="center">
+  <img src="img/HuntForRedOctober.jpg" />
+</p>
+
+
 ## Purpose
 
 The aim of this project is to watch a define set of prefixes over several BGP collectors, in order to detect inconsistancies in annoucements and prevent hijackings.
