@@ -57,7 +57,7 @@ List of existing collectors :
 
 ## 3 - Build an history
 
-The history is constructed by parsing one bview per day from the defined ranged in `common.py` and storing all monitored prefixes announced during that period and ASes that announced those prefixes.
+The history is constructed by parsing one bview per day from the defined period in `common.py` and storing all monitored prefixes announced during that period and ASes that announced those prefixes.
 
 Then, this history will be used to discard inconsistancies in further annoucements.
 
@@ -95,4 +95,175 @@ Finaly, latests updates from considered collectors are parsed every 5 minutes to
 
 ## Run
 
-`python3 watcher.py`
+``` python3 watcher.py
+BGP watcher
+    Collectors : 6/14/26
+    History : 25 to 29 of 06-2022
+
+[+] Seting up env
+[+] Checking ripe.db.inetnum.gz
+[*] Updating french prefixes from ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz
+[+] Checking french ASes db
+[*] Updating french ASes from https://www.cidr-report.org/as2.0/autnums.html
+[+] Building history
+        [+] Downloading https://data.ris.ripe.net/rrc06/2022.06/bview.20220625.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-25-rrc06-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-25-rrc06-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc06/2022.06/bview.20220626.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-26-rrc06-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-26-rrc06-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc06/2022.06/bview.20220627.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-27-rrc06-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-27-rrc06-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc06/2022.06/bview.20220628.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-28-rrc06-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-28-rrc06-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/2022.06/bview.20220625.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-25-rrc14-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-25-rrc14-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/2022.06/bview.20220626.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-26-rrc14-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-26-rrc14-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/2022.06/bview.20220627.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-27-rrc14-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-27-rrc14-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/2022.06/bview.20220628.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-28-rrc14-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-28-rrc14-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/2022.06/bview.20220625.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-25-rrc26-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-25-rrc26-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/2022.06/bview.20220626.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-26-rrc26-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-26-rrc26-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/2022.06/bview.20220627.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-27-rrc26-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-27-rrc26-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/2022.06/bview.20220628.0800.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-28-rrc26-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-28-rrc26-dump.txt
+[+] Checking latests bview
+        [+] Downloading https://data.ris.ripe.net/rrc06/latest-bview.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc06-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc06-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/latest-bview.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc14-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc14-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/latest-bview.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc26-bview.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc26-dump.txt
+[>] Prefix 62.244.102.0/24       announced by 31693/8565         Tag moas
+[>] Prefix 77.111.208.0/22       announced by 53550/200077       Tag moas
+[>] Prefix 81.171.106.0/24       announced by 12989/33438        Tag moas
+[>] Prefix 83.243.16.0/21        announced by 31216/4455         Tag moas
+[>] Prefix 89.30.40.0/21         announced by 31216/4455         Tag moas
+[>] Prefix 89.30.109.0/24        announced by 31216/201313/4455  Tag moas
+[>] Prefix 89.30.121.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 91.199.242.0/24       announced by 55569/44788/19750  Tag moas
+[>] Prefix 91.212.98.0/24        announced by 55569/44788        Tag moas
+[>] Prefix 178.171.72.0/22       announced by 9009/213296        Tag moas
+[>] Prefix 185.3.24.0/22         announced by 15830/24990        Tag moas
+[>] Prefix 185.37.220.0/22       announced by 200077/53550       Tag moas
+[>] Prefix 185.37.220.0/24       announced by 53550/200077       Tag moas
+[>] Prefix 185.147.212.0/24      announced by 12989/33438        Tag moas
+[>] Prefix 185.175.103.0/24      announced by 47582/206819       Tag moas
+[>] Prefix 185.253.54.0/24       announced by 834/210619         Tag moas
+[>] Prefix 193.26.22.0/24        announced by 61317/12874        Tag moas
+[>] Prefix 193.27.78.0/23        announced by 31216/4455         Tag moas
+[>] Prefix 193.104.158.0/24      announced by 202213/50183       Tag moas
+[>] Prefix 193.202.125.0/24      announced by 31216/4455         Tag moas
+[>] Prefix 193.218.12.0/22       announced by 31216/4455         Tag moas
+[>] Prefix 194.0.9.0/24  announced by 2484/2486  Tag moas
+[>] Prefix 194.50.95.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 212.180.11.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 212.180.17.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 217.69.16.0/20        announced by 15830/24990        Tag moas
+[>] Prefix 185.144.12.0/24       announced by 834/207459         Tag moas
+[>] Prefix 62.244.102.0/24       announced by 31693/8565         Tag moas
+[>] Prefix 77.111.208.0/22       announced by 53550/200077       Tag moas
+[>] Prefix 81.171.106.0/24       announced by 12989/33438        Tag moas
+[>] Prefix 83.243.16.0/21        announced by 31216/4455         Tag moas
+[>] Prefix 89.30.40.0/21         announced by 31216/4455         Tag moas
+[>] Prefix 89.30.109.0/24        announced by 31216/201313/4455  Tag moas
+[>] Prefix 89.30.121.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 91.199.242.0/24       announced by 55569/44788/19750  Tag moas
+[>] Prefix 91.212.98.0/24        announced by 55569/44788        Tag moas
+[>] Prefix 178.171.72.0/22       announced by 9009/213296        Tag moas
+[>] Prefix 185.3.24.0/22         announced by 15830/24990        Tag moas
+[>] Prefix 185.37.220.0/22       announced by 200077/53550       Tag moas
+[>] Prefix 185.37.220.0/24       announced by 53550/200077       Tag moas
+[>] Prefix 185.147.212.0/24      announced by 12989/33438        Tag moas
+[>] Prefix 185.175.103.0/24      announced by 47582/206819       Tag moas
+[>] Prefix 185.253.54.0/24       announced by 834/210619         Tag moas
+[>] Prefix 193.26.22.0/24        announced by 61317/12874        Tag moas
+[>] Prefix 193.27.78.0/23        announced by 31216/4455         Tag moas
+[>] Prefix 193.104.158.0/24      announced by 202213/50183       Tag moas
+[>] Prefix 193.202.125.0/24      announced by 31216/4455         Tag moas
+[>] Prefix 193.218.12.0/22       announced by 31216/4455         Tag moas
+[>] Prefix 194.0.9.0/24  announced by 2484/2486  Tag moas
+[>] Prefix 194.50.95.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 212.180.11.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 212.180.17.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 217.69.16.0/20        announced by 15830/24990        Tag moas
+[>] Prefix 185.144.12.0/24       announced by 834/207459         Tag moas
+[>] Prefix 62.244.102.0/24       announced by 31693/8565         Tag moas
+[>] Prefix 77.111.208.0/22       announced by 53550/200077       Tag moas
+[>] Prefix 81.171.106.0/24       announced by 12989/33438        Tag moas
+[>] Prefix 83.243.16.0/21        announced by 31216/4455         Tag moas
+[>] Prefix 89.30.40.0/21         announced by 31216/4455         Tag moas
+[>] Prefix 89.30.109.0/24        announced by 31216/201313/4455  Tag moas
+[>] Prefix 89.30.121.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 91.199.242.0/24       announced by 55569/44788/19750  Tag moas
+[>] Prefix 91.212.98.0/24        announced by 55569/44788        Tag moas
+[>] Prefix 178.171.72.0/22       announced by 9009/213296        Tag moas
+[>] Prefix 185.3.24.0/22         announced by 15830/24990        Tag moas
+[>] Prefix 185.37.220.0/22       announced by 200077/53550       Tag moas
+[>] Prefix 185.37.220.0/24       announced by 53550/200077       Tag moas
+[>] Prefix 185.147.212.0/24      announced by 12989/33438        Tag moas
+[>] Prefix 185.175.103.0/24      announced by 47582/206819       Tag moas
+[>] Prefix 185.253.54.0/24       announced by 834/210619         Tag moas
+[>] Prefix 193.26.22.0/24        announced by 61317/12874        Tag moas
+[>] Prefix 193.27.78.0/23        announced by 31216/4455         Tag moas
+[>] Prefix 193.104.158.0/24      announced by 202213/50183       Tag moas
+[>] Prefix 193.202.125.0/24      announced by 31216/4455         Tag moas
+[>] Prefix 193.218.12.0/22       announced by 31216/4455         Tag moas
+[>] Prefix 194.0.9.0/24  announced by 2484/2486  Tag moas
+[>] Prefix 194.50.95.0/24        announced by 31216/4455         Tag moas
+[>] Prefix 212.180.11.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 212.180.17.0/24       announced by 65154/4589         Tag moas
+[>] Prefix 217.69.16.0/20        announced by 15830/24990        Tag moas
+[>] Prefix 185.144.12.0/24       announced by 834/207459         Tag moas
+[+] Computing all FR subnets
+[+] Update n°1
+        [+] Downloading https://data.ris.ripe.net/rrc06/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc06-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc06-update-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc14-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc14-update-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc26-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc26-update-dump.txt
+[+] Update n°2
+        [+] Downloading https://data.ris.ripe.net/rrc06/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc06-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc06-update-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc14/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc14-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc14-update-dump.txt
+        [+] Downloading https://data.ris.ripe.net/rrc26/latest-update.gz
+        [+] Parsing datas_rrc06-14-26_202206/2022-06-30-rrc26-update.gz
+        [+] Processing datas_rrc06-14-26_202206/2022-06-30-rrc26-update-dump.txt
+[>] Prefix 81.253.99.0/24        announced by 8376       Tag more_spec
+[>] Prefix 171.18.128.0/22       announced by 397993     Tag more_spec
+[>] Prefix 163.116.226.0/24      announced by 55256      Tag more_spec
+[>] Prefix 178.236.232.0/24      announced by 134548     Tag more_spec
+[>] Prefix 81.253.99.0/24        announced by 8376       Tag more_spec
+[>] Prefix 171.18.128.0/22       announced by 397993     Tag more_spec
+[>] Prefix 163.116.226.0/24      announced by 55256      Tag more_spec
+[>] Prefix 178.236.232.0/24      announced by 134548     Tag more_spec
+[>] Prefix 81.253.99.0/24        announced by 8376       Tag more_spec
+[>] Prefix 171.18.128.0/22       announced by 397993     Tag more_spec
+[>] Prefix 163.116.226.0/24      announced by 55256      Tag more_spec
+[>] Prefix 178.236.232.0/24      announced by 134548     Tag more_spec
+```

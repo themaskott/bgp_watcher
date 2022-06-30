@@ -32,8 +32,8 @@ collectors = [6,14,26]
 ym=[2022,6]
 
 # watcher/history start_day end_day
-sd = 15
-ed = 20
+sd = 25
+ed = 29
 
 # number of update to watch
 count = 15
