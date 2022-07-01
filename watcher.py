@@ -33,7 +33,7 @@ def history(collectors:list, ym:list)->dict:
     bviews=[]
 
     for c in collectors:
-        for d in range(common.sd, common.ed):
+        for d in range(common.sd, common.ed + 1):
             bviews.append(rrc.Bview(c, False,[y,m,d]))
 
     for b in bviews:
@@ -100,18 +100,12 @@ def update(collectors:list)->list:
 
     return updates
 
-def search(collectors:list, ym:list)->dict:
+def search(collectors:list, h:dict, ym:list)->dict:
     """
     Search latest for new announcment regarding history
     """
 
     y,m = ym
-    if path.isfile( common.HISTORY_JSON ):
-        common.Affich.success(0, "Loading existing history")
-        h = common.load_json_file( common.HISTORY_JSON )
-    else:
-        common.Affich.success(0, "Building history")
-        h = history(collectors, ym)
 
     bviews = latest(collectors)
 
@@ -151,11 +145,9 @@ def search(collectors:list, ym:list)->dict:
                         country_json.update({p:{"announced_by":a, "tag":"hijack"}})
                         common.Affich.event(0, p,b.announced[p], "hijack")
 
-    # save JSON
-    common.save_json_file(moas_json, common.MOAS_OUT_JSON )
-    common.save_json_file(country_json, common.COUNTRY_OUT_JSON )
 
-    return moas_json, country_json, h
+
+    return moas_json, country_json
 
 
 def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
@@ -165,6 +157,8 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
     common.Affich.success(0, "Computing all FR subnets")
     all_fr_subnets = subnets.Subnets(FRENCH_PREFIXES).all_subnets()
     open(common.ALL_FR_SUBNETS_JSON,"w").write(str(all_fr_subnets))
+
+    more_spec_json = {}
 
     i = 1
     while i < common.count:
@@ -198,11 +192,18 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
 
                 if (a not in AS_FR) and (p not in FRENCH_PREFIXES) and (p in all_fr_subnets):
                     common.Affich.event(0, p,u.announced[p], "more_spec")
+                    more_spec_json.update({p:{"announced_by":u.announced[p], "tag":"more_spec"}})
 
 
         # new update every 5 minutes
         time.sleep(300)
         i += 1
+
+    # save JSON
+    common.save_json_file(moas_json, common.MOAS_OUT_JSON )
+    common.save_json_file(country_json, common.COUNTRY_OUT_JSON )
+    common.save_json_file(more_spec_json, common.MORE_SPEC_JSON )
+
 
 def main():
     # print menu
@@ -227,8 +228,16 @@ def main():
     FRENCH_PREFIXES = common.load_json_file( common.FRENCH_PREFIXES_JSON )
     AS_FR = common.load_json_file( common.FRENCH_AS_JSON )
 
-    # first search from bview after building a history according to paramaters
-    moas_json, country_json, h = search(common.collectors, common.ym)
+    # load previously built history or build it
+    if path.isfile( common.HISTORY_JSON ):
+        common.Affich.success(0, "Loading existing history")
+        h = common.load_json_file( common.HISTORY_JSON )
+    else:
+        common.Affich.success(0, "Building history")
+        h = history(collectors, common.ym)
+
+    # first search from bview according to paramaters
+    moas_json, country_json = search(common.collectors, h, common.ym)
 
     # watch updates announcements
     watch(moas_json, country_json, h, common.collectors)
