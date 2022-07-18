@@ -234,7 +234,7 @@ def main():
         h = common.load_json_file( common.HISTORY_JSON )
     else:
         common.Affich.success(0, "Building history")
-        h = history(collectors, common.ym)
+        h = history(common.collectors, common.ym)
 
     # first search from bview according to paramaters
     moas_json, country_json = search(common.collectors, h, common.ym)
