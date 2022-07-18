@@ -24,17 +24,18 @@ ALL_FR_SUBNETS_JSON = DATAS_DIR + "all_fr_subnets.json"
 MOAS_OUT_JSON = ""
 COUNTRY_OUT_JSON = ""
 HISTORY_JSON = ""
+AS_NEIGHBOUR_JSON = ""
 MORE_SPEC_JSON = ""
 
 # collectors
 collectors = [6,14,26]
 
 # year and month
-ym=[2022,6]
+ym=[2022,7]
 
 # watcher/history start_day end_day
-sd = 28
-ed = 30
+sd = 1
+ed = 6
 
 # number of update to watch
 count = 5
@@ -49,7 +50,7 @@ def setup():
         exit(0)
     if not path.isdir(DATAS_DIR): mkdir("datas", 0o755)
     y,m=ym
-    global RESULTS_DIR, SESSION_DIR, HISTORY_JSON, MOAS_OUT_JSON, COUNTRY_OUT_JSON, MORE_SPEC_JSON
+    global RESULTS_DIR, SESSION_DIR, HISTORY_JSON, MOAS_OUT_JSON, COUNTRY_OUT_JSON, MORE_SPEC_JSON, AS_NEIGHBOUR_JSON
     RESULTS_DIR = RESULTS_DIR_TEMPLATE.format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
     SESSION_DIR = SESSION_DIR_TEMPLATE.format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
     if not path.isdir(RESULTS_DIR): mkdir(RESULTS_DIR, 0o755)
@@ -57,6 +58,7 @@ def setup():
     MOAS_OUT_JSON = RESULTS_DIR + "moas-rrc{}-{:04n}{:02n}.json".format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
     COUNTRY_OUT_JSON = RESULTS_DIR + "country-rrc{}-{:04n}{:02n}.json".format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
     HISTORY_JSON = RESULTS_DIR + "history-rrc{}-{:04n}{:02n}.json".format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
+    AS_NEIGHBOUR_JSON = RESULTS_DIR + "as-neighbours-rrrc{}-{:04n}{:02n}.json".format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
     MORE_SPEC_JSON = RESULTS_DIR + "more-spec-rrc{}-{:04n}{:02n}.json".format("-".join(["{:02n}".format(_) for _ in collectors]), y,m)
 
 
@@ -125,3 +127,7 @@ class Affich(Enum):
     @staticmethod
     def event(indent:int, p:str, a:list, t:str):
         if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] Prefix {p}\t announced by {'/'.join(map(str, a))}\t Tag {t}")
+
+    @staticmethod
+    def event_as(indent:int, a:str, n:list, t:str):
+        if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] AS {a}\t : neighbours {'/'.join(map(str, n))}\t Tag {t}")

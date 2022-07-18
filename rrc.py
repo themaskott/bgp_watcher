@@ -41,6 +41,7 @@ class Bview():
     name = ""
     dump = ""
     announced = {}
+    as_neighbours = {}
 
     def __init__(self, rrc, latest=True, ymd=[2022,5,1]):
         self.rrc = rrc
@@ -75,13 +76,26 @@ class Bview():
         """
         with open(self.dump,"r") as f:
             for l in f:
+                path = l.split('|')[6].split(' ')
+                # extract ases announcing a prefix
                 prefix = l.split('|')[5]
-                announcer = l.split('|')[6].split(' ')[-1]
+                announcer = path[-1]
                 if prefix in self.announced:
                     if announcer not in self.announced[prefix]:
                         self.announced[prefix].append(announcer)
                 else:
                     self.announced.update({prefix:[announcer]})
+
+                # extract as annoucner's neighbours
+                if len(path)>1:
+                    neighbour = path[-2]
+                    if announcer in self.as_neighbours:
+                        if neighbour not in self.as_neighbours[announcer]:
+                            self.as_neighbours[announcer].append(neighbour)
+                    else:
+                        self.as_neighbours.update({announcer:[neighbour]})
+
+
 
 
 class Update():
@@ -91,6 +105,8 @@ class Update():
     name = ""
     dump = ""
     announced = {}
+    as_neighbours = {}
+
 
     def __init__(self, rrc, latest=True, ymd=[2022,5,1]):
         self.rrc = rrc
@@ -128,9 +144,18 @@ class Update():
                 # announce type W = WITHDRAW
                 if type == "A":
                     prefix = l.split('|')[5]
-                    announcer = l.split('|')[6].split(' ')[-1]
+                    path = l.split('|')[6].split(' ')
+                    announcer = path[-1]
                     if prefix in self.announced:
                         if announcer not in self.announced[prefix]:
                             self.announced[prefix].append(announcer)
                     else:
                         self.announced.update({prefix:[announcer]})
+
+                    if len(path)>1:
+                        neighbour = l.split('|')[6].split(' ')[-2]
+                        if announcer in self.as_neighbours:
+                            if neighbour not in self.as_neighbours[announcer]:
+                                self.as_neighbours[announcer].append(neighbour)
+                        else:
+                            self.as_neighbours.update({announcer:[neighbour]})

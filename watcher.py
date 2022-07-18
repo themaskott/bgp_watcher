@@ -22,43 +22,6 @@ import irr, rrc, autnums, common, subnets
 FRENCH_PREFIXES = {}
 AS_FR = {}
 
-
-def history(collectors:list, ym:list)->dict:
-    """
-    Build an history for french prefixes announced in collectors during the month m of the year y
-    Range : start day (sd) to end day (ed)
-    """
-    h = {}
-    y,m=ym
-    bviews=[]
-
-    for c in collectors:
-        for d in range(common.sd, common.ed + 1):
-            bviews.append(rrc.Bview(c, False,[y,m,d]))
-
-    for b in bviews:
-        b.get()
-        common.Affich.success(1, "Downloading " + b.url)
-        b.parse()
-        common.Affich.success(1, "Parsing " + b.name)
-        b.process()
-        common.Affich.success(1, "Processing " + b.dump)
-        for p in b.announced:
-            if p in FRENCH_PREFIXES:
-                if not p in h:
-                    h.update({p:{}})
-                for a in b.announced[p]:
-                    if a in h[p]:
-                        h[p][a] += 1
-                    else:
-                        h[p].update({a:1})
-
-    # save history to file
-    common.save_json_file( h, common.HISTORY_JSON )
-
-    return h
-
-
 def latest(collectors:list)->list:
     """
     Download and process latest bview from each collectors
@@ -100,7 +63,56 @@ def update(collectors:list)->list:
 
     return updates
 
-def search(collectors:list, h:dict, ym:list)->dict:
+
+def history(collectors:list, ym:list)->dict:
+    """
+    Build an history for french prefixes announced in collectors during the month m of the year y
+    Range : start day (sd) to end day (ed)
+    """
+    h = {}
+    as_neighbours = {}
+    y,m=ym
+    bviews=[]
+
+    for c in collectors:
+        for d in range(common.sd, common.ed + 1):
+            bviews.append(rrc.Bview(c, False,[y,m,d]))
+
+    for b in bviews:
+        b.get()
+        common.Affich.success(1, "Downloading " + b.url)
+        b.parse()
+        common.Affich.success(1, "Parsing " + b.name)
+        b.process()
+        common.Affich.success(1, "Processing " + b.dump)
+
+        # counting how many times an AS announced a specific prefix
+        for p in b.announced:
+            if p in FRENCH_PREFIXES:
+                if not p in h:
+                    h.update({p:{}})
+                for a in b.announced[p]:
+                    if a in h[p]:
+                        h[p][a] += 1
+                    else:
+                        h[p].update({a:1})
+
+        # merging as_neighbour dict from all bviews
+        for a in b.as_neighbours:
+            if not a in as_neighbours:
+                as_neighbours.update({a:[]})
+            for n in b.as_neighbours[a]:
+                if not n in as_neighbours[a]:
+                    as_neighbours[a].append(n)
+
+    # save history to file
+    common.save_json_file(h, common.HISTORY_JSON)
+    common.save_json_file(as_neighbours, common.AS_NEIGHBOUR_JSON)
+
+    return h, as_neighbours
+
+
+def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
     """
     Search latest for new announcment regarding history
     """
@@ -111,6 +123,7 @@ def search(collectors:list, h:dict, ym:list)->dict:
 
     moas_json = {}
     country_json = {}
+    neighbours_json = {}
 
     # search for inconsistancies
     for b in bviews:
@@ -145,12 +158,24 @@ def search(collectors:list, h:dict, ym:list)->dict:
                         country_json.update({p:{"announced_by":a, "tag":"hijack"}})
                         common.Affich.event(0, p,b.announced[p], "hijack")
 
+        # unknwon neighbour
+        for a in b.as_neighbours:
+            if str(a) in AS_FR:
+                if not a in as_neighbours:
+                    neighbours_json.update({a:{"neighbours":b.as_neighbours[a], "tag":"new_as"}})
+                    common.Affich.event_as(0, a, [b.as_neighbours[a]], "new_as")
+                else:
+                    for n in b.as_neighbours[a]:
+                        if not n in as_neighbours[a]:
+                            neighbours_json.update({a:{"neighbour":n, "tag":"naw_neighbour"}})
+                            common.Affich.event_as(0, a, [n], "new_neighbour")
 
 
-    return moas_json, country_json
+
+    return moas_json, country_json, neighbours_json
 
 
-def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
+def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours:dict, h:dict, collectors:list):
     """
     Monitor updates from given collectors
     """
@@ -168,6 +193,7 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
 
         for u in updates:
             for p in u.announced:
+                # check if p is announced by more than one AS
                 if p in FRENCH_PREFIXES and len(u.announced[p]) > 1:
                     if p in moas_json:
                         common.Affich.event(0, p,u.announced[p], "knwon_moas")
@@ -175,13 +201,16 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
                         common.Affich.event(0, p,u.announced[p], "new_moas")
                         moas_json.update({p:{"announced_by":b.announced[p]}})
 
+                # AS
                 a = str(u.announced[p][0])
-                # prefix not seen in history
+                # french prefixes announced by foreign AS
                 if p in FRENCH_PREFIXES and not a in AS_FR:
+                    # prefix not seen in history
                     if not p in h:
                         common.Affich.event(0, p,u.announced[p], "new_p")
                         country_json.update({p:{"announced_by":a, "tag":"new_p"}})
                     else:
+                        # prefix seen in histir but from different announcer
                         if not u.announced[p][0] in h[p]:
                             common.Affich.event(0, p,u.announced[p], "new_a")
                             country_json.update({p:{"announced_by":a, "tag":"new_a"}})
@@ -189,7 +218,7 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
                             common.Affich.event(0, p,u.announced[p], "hijack")
                             country_json.update({p:{"announced_by":a, "tag":"hijack"}})
 
-
+                # check for more specific announcement
                 if (a not in AS_FR) and (p not in FRENCH_PREFIXES) and (p in all_fr_subnets):
                     common.Affich.event(0, p,u.announced[p], "more_spec")
                     more_spec_json.update({p:{"announced_by":u.announced[p], "tag":"more_spec"}})
@@ -200,9 +229,9 @@ def watch(moas_json:dict, country_json:dict, h:dict, collectors:list):
         i += 1
 
     # save JSON
-    common.save_json_file(moas_json, common.MOAS_OUT_JSON )
-    common.save_json_file(country_json, common.COUNTRY_OUT_JSON )
-    common.save_json_file(more_spec_json, common.MORE_SPEC_JSON )
+    common.save_json_file(moas_json, common.MOAS_OUT_JSON)
+    common.save_json_file(country_json, common.COUNTRY_OUT_JSON)
+    common.save_json_file(more_spec_json, common.MORE_SPEC_JSON)
 
 
 def main():
@@ -220,27 +249,30 @@ def main():
 
     # create french_as db if needed
     common.Affich.success(0, "Checking french ASes db")
-    if not path.isfile( common.FRENCH_AS_JSON ):
+    if not path.isfile(common.FRENCH_AS_JSON):
         autnums.extract_AS(autnums.update_AS())
 
     # load datas
     global FRENCH_PREFIXES, AS_FR
-    FRENCH_PREFIXES = common.load_json_file( common.FRENCH_PREFIXES_JSON )
-    AS_FR = common.load_json_file( common.FRENCH_AS_JSON )
+    FRENCH_PREFIXES = common.load_json_file(common.FRENCH_PREFIXES_JSON)
+    AS_FR = common.load_json_file(common.FRENCH_AS_JSON)
 
     # load previously built history or build it
-    if path.isfile( common.HISTORY_JSON ):
+    if path.isfile(common.HISTORY_JSON) and path.isfile(common.AS_NEIGHBOUR_JSON):
         common.Affich.success(0, "Loading existing history")
-        h = common.load_json_file( common.HISTORY_JSON )
+        h = common.load_json_file(common.HISTORY_JSON)
+        common.Affich.success(0, "Loading AS neighbours")
+        as_neighbours = common.load_json_file(common.AS_NEIGHBOUR_JSON)
+
     else:
         common.Affich.success(0, "Building history")
-        h = history(common.collectors, common.ym)
+        h, as_neighbours = history(common.collectors, common.ym)
 
     # first search from bview according to paramaters
-    moas_json, country_json = search(common.collectors, h, common.ym)
+    moas_json, country_json, neighbours_json = search(common.collectors, as_neighbours, h, common.ym)
 
     # watch updates announcements
-    watch(moas_json, country_json, h, common.collectors)
+    watch(moas_json, country_json, neighbours_json, as_neighbours, h, common.collectors)
 
 if __name__ == "__main__":
     main()
