@@ -34,11 +34,11 @@ collectors = [6,14,26]
 ym=[2022,7]
 
 # watcher/history start_day end_day
-sd = 1
-ed = 6
+sd = 15
+ed = 17
 
 # number of update to watch
-count = 5
+count = 3
 
 def setup():
     """

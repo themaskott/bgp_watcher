@@ -145,11 +145,16 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
             if p in FRENCH_PREFIXES and not a in AS_FR:
                 # prefix not seen in history
                 if  not p in h:
+                    # update history
+                    h.update({p:{a:1}})
+                    # save to json
                     country_json.update({p:{"announced_by":a, "tag":"new_p"}})
+                    # print
                     common.Affich.event(0, p,b.announced[p], "new_p")
                 else:
                     # prefix previously seen but new AS announcer
                     if not b.announced[p][0] in h[p]:
+                        h[p].upade({b.announced[p][0]:1})
                         country_json.update({p:{"announced_by":a, "tag":"new_a"}})
                         common.Affich.event(0, p,b.announced[p], "new_a")
 
@@ -162,17 +167,18 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
         for a in b.as_neighbours:
             if str(a) in AS_FR:
                 if not a in as_neighbours:
-                    neighbours_json.update({a:{"neighbours":b.as_neighbours[a], "tag":"new_as"}})
-                    common.Affich.event_as(0, a, [b.as_neighbours[a]], "new_as")
-                else:
-                    for n in b.as_neighbours[a]:
-                        if not n in as_neighbours[a]:
-                            neighbours_json.update({a:{"neighbour":n, "tag":"naw_neighbour"}})
-                            common.Affich.event_as(0, a, [n], "new_neighbour")
+                    as_neighbours.update({a:[]})
+                    neighbours_json.update({a:{"neighbours":"", "tag":"new_as"}})
+                    common.Affich.event_as(0, a, [], "new_as")
+                for n in b.as_neighbours[a]:
+                    if not n in as_neighbours[a]:
+                        as_neighbours[a].append(n)
+                        neighbours_json.update({a:{"neighbour":n, "tag":"naw_neighbour"}})
+                        common.Affich.event_as(0, a, [n], "new_neighbour")
 
 
 
-    return moas_json, country_json, neighbours_json
+    return moas_json, country_json, neighbours_json, as_neighbours, h
 
 
 def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours:dict, h:dict, collectors:list):
@@ -188,7 +194,7 @@ def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours
     i = 1
     while i < common.count:
 
-        common.Affich.success(0, "Update n°"+str(i))
+        common.Affich.success(0, f"Update n°{i}")
         updates = update(collectors)
 
         for u in updates:
@@ -207,22 +213,31 @@ def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours
                 if p in FRENCH_PREFIXES and not a in AS_FR:
                     # prefix not seen in history
                     if not p in h:
+                        h.update({p:{a:1}})
                         common.Affich.event(0, p,u.announced[p], "new_p")
                         country_json.update({p:{"announced_by":a, "tag":"new_p"}})
                     else:
-                        # prefix seen in histir but from different announcer
+                        # prefix seen in history but from different announcer
                         if not u.announced[p][0] in h[p]:
+                            h[p].update({u.announced[p][0]:1})
                             common.Affich.event(0, p,u.announced[p], "new_a")
                             country_json.update({p:{"announced_by":a, "tag":"new_a"}})
                         elif h[p][u.announced[p][0]] < 2:
                             common.Affich.event(0, p,u.announced[p], "hijack")
                             country_json.update({p:{"announced_by":a, "tag":"hijack"}})
 
-                # check for more specific announcement
-                if (a not in AS_FR) and (p not in FRENCH_PREFIXES) and (p in all_fr_subnets):
+                # check for more specific announcement :
+                # announcer a is in AS_FR
+                # prefix p not in FRENCH_PREFIXES (other wise not a subnet and already seen above)
+                # prefix p is a subnet of a french prefix
+                # p not in more_spec_json or with a differrent announcer (== not already seen)
+                # last condition can be remove to see if a subnet is beeing announced update after updates
+                if (a not in AS_FR) and (p not in FRENCH_PREFIXES) and (p in all_fr_subnets) and (p not in more_spec_json or (p in more_spec_json and more_spec_json[p]["announced_by"]!=u.announced[p])):
                     common.Affich.event(0, p,u.announced[p], "more_spec")
                     more_spec_json.update({p:{"announced_by":u.announced[p], "tag":"more_spec"}})
 
+
+        common.Affich.success(0, f"Update n°{i} done")
 
         # new update every 5 minutes
         time.sleep(300)
@@ -269,7 +284,7 @@ def main():
         h, as_neighbours = history(common.collectors, common.ym)
 
     # first search from bview according to paramaters
-    moas_json, country_json, neighbours_json = search(common.collectors, as_neighbours, h, common.ym)
+    moas_json, country_json, neighbours_json, as_neighbours, h = search(common.collectors, as_neighbours, h, common.ym)
 
     # watch updates announcements
     watch(moas_json, country_json, neighbours_json, as_neighbours, h, common.collectors)
