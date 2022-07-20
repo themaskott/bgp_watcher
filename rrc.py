@@ -153,7 +153,7 @@ class Update():
                         self.announced.update({prefix:[announcer]})
 
                     if len(path)>1:
-                        neighbour = l.split('|')[6].split(' ')[-2]
+                        neighbour = path[-2]
                         if announcer in self.as_neighbours:
                             if neighbour not in self.as_neighbours[announcer]:
                                 self.as_neighbours[announcer].append(neighbour)

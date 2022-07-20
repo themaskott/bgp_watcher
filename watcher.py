@@ -173,7 +173,7 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
                 for n in b.as_neighbours[a]:
                     if not n in as_neighbours[a]:
                         as_neighbours[a].append(n)
-                        neighbours_json.update({a:{"neighbour":n, "tag":"naw_neighbour"}})
+                        neighbours_json.update({a:{"neighbour":n, "tag":"new_neighbour"}})
                         common.Affich.event_as(0, a, [n], "new_neighbour")
 
 
@@ -181,7 +181,7 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
     return moas_json, country_json, neighbours_json, as_neighbours, h
 
 
-def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours:dict, h:dict, collectors:list):
+def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours:dict, h:dict, collectors:list)->None:
     """
     Monitor updates from given collectors
     """
