@@ -129,7 +129,10 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
     for b in bviews:
         for p in b.announced:
             # MOAS
-            if p in FRENCH_PREFIXES and len(b.announced[p]) > 1:
+            # prefix p in FRENCH_PREFIXES
+            # more than one AS announcing p
+            # p not seen before or seen with different announcers
+            if p in FRENCH_PREFIXES and len(b.announced[p]) > 1 and (p not in moas_json or (p in moas_json and moas_json[p]["announced_by"]!=b.announced[p])):
                 # print moas
                 common.Affich.event(0, p,b.announced[p], "moas")
                 # save to json
@@ -169,12 +172,12 @@ def search(collectors:list, as_neighbours:dict, h:dict, ym:list)->dict:
                 if not a in as_neighbours:
                     as_neighbours.update({a:[]})
                     neighbours_json.update({a:{"neighbours":"", "tag":"new_as"}})
-                    common.Affich.event_as(0, a, [], "new_as")
+                    common.Affich.event_as(0, a, "", "new_as")
                 for n in b.as_neighbours[a]:
                     if not n in as_neighbours[a]:
                         as_neighbours[a].append(n)
                         neighbours_json.update({a:{"neighbour":n, "tag":"new_neighbour"}})
-                        common.Affich.event_as(0, a, [n], "new_neighbour")
+                        common.Affich.event_as(0, a, n, "new_neighbour")
 
 
 
@@ -200,7 +203,7 @@ def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours
         for u in updates:
             for p in u.announced:
                 # check if p is announced by more than one AS
-                if p in FRENCH_PREFIXES and len(u.announced[p]) > 1:
+                if p in FRENCH_PREFIXES and len(u.announced[p]) > 1 and (p not in moas_json or (p in moas_json and moas_json[p]["announced_by"]!=u.announced[p])):
                     if p in moas_json:
                         common.Affich.event(0, p,u.announced[p], "knwon_moas")
                     else:

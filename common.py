@@ -126,8 +126,8 @@ class Affich(Enum):
 
     @staticmethod
     def event(indent:int, p:str, a:list, t:str):
-        if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] Prefix {p}\t announced by {'/'.join(map(str, a))}\t Tag {t}")
+        if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] Prefix: {p}\t announced by: {'/'.join(map(str, a))}\t Tag: {t}")
 
     @staticmethod
-    def event_as(indent:int, a:str, n:list, t:str):
-        if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] AS {a}\t : neighbours {'/'.join(map(str, n))}\t Tag {t}")
+    def event_as(indent:int, a:str, n:str, t:str):
+        if OUT: print("\t" * indent + f"[{Affich.CYAN.value}>{Affich.RESET.value}] AS: {a}\t neighbour: {n}\t Tag: {t}")
