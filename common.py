@@ -33,12 +33,12 @@ collectors = [6,14,26]
 # year and month
 ym=[2022,7]
 
-# watcher/history start_day end_day
-sd = 15
-ed = 17
+# watcher/history start_day end_day (included)
+sd = 18
+ed = 20
 
 # number of update to watch
-count = 3
+count = 5
 
 def setup():
     """
@@ -84,7 +84,8 @@ def menu():
     msg = """BGP watcher
     Collectors : {}
     History : {:02n} to {:02n} of {:02n}-{:04n}
-    """.format("/".join(map(str,collectors)), sd, ed, m, y)
+    Updates : {}
+    """.format("/".join(map(str,collectors)), sd, ed, m, y, count)
     print(msg)
 
 def download(url:str, out:str):

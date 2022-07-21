@@ -195,7 +195,7 @@ def watch(moas_json:dict, country_json:dict, neighbours_json:dict, as_neighbours
     more_spec_json = {}
 
     i = 1
-    while i < common.count:
+    while i <= common.count:
 
         common.Affich.success(0, f"Update n°{i}")
         updates = update(collectors)
